@@ -1,6 +1,6 @@
 services:
   db:
-    image: mongo:8
+    image: mongo:4.4
     restart: unless-stopped
     environment:
       MONGO_INITDB_ROOT_USERNAME: ${MONGO_ROOT_USER}
@@ -9,7 +9,7 @@ services:
     volumes:
       - mongodb_data:/data/db
     healthcheck:
-      test: ["CMD-SHELL", "mongosh --quiet --eval \"quit(db.adminCommand('ping').ok ? 0 : 2)\""]
+      test: ["CMD-SHELL", "mongo --quiet --eval \"quit(db.adminCommand('ping').ok ? 0 : 2)\""]
       interval: 10s
       timeout: 10s
       retries: 20
