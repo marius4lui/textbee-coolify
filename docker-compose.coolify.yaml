@@ -1,32 +1,23 @@
 services:
   db:
-    image: mongo:8
-    restart: unless-stopped
-    environment:
-      MONGO_INITDB_ROOT_USERNAME: ${MONGO_ROOT_USER}
-      MONGO_INITDB_ROOT_PASSWORD: ${MONGO_ROOT_PASS}
-      MONGO_INITDB_DATABASE: textbee
-    volumes:
-      - mongodb_data:/data/db
-    healthcheck:
-      test:
-        [
-          "CMD",
-          "mongosh",
-          "--quiet",
-          "--username",
-          "${MONGO_ROOT_USER}",
-          "--password",
-          "${MONGO_ROOT_PASS}",
-          "--authenticationDatabase",
-          "admin",
-          "--eval",
-          "db.adminCommand('ping').ok"
-        ]
-      interval: 10s
-      timeout: 10s
-      retries: 10
-      start_period: 30s
+  image: mongo:8
+  restart: unless-stopped
+  environment:
+    MONGO_INITDB_ROOT_USERNAME: ${MONGO_ROOT_USER}
+    MONGO_INITDB_ROOT_PASSWORD: ${MONGO_ROOT_PASS}
+    MONGO_INITDB_DATABASE: textbee
+  volumes:
+    - mongodb-data:/data/db
+  healthcheck:
+    test:
+      [
+        "CMD-SHELL",
+        "mongosh --quiet --username \"$${MONGO_INITDB_ROOT_USERNAME}\" --password \"$${MONGO_INITDB_ROOT_PASSWORD}\" --authenticationDatabase admin --eval \"quit(db.adminCommand('ping').ok ? 0 : 2)\""
+      ]
+    interval: 10s
+    timeout: 10s
+    retries: 15
+    start_period: 40s
 
   redis:
     image: redis:7-alpine
