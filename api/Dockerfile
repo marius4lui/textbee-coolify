@@ -49,8 +49,8 @@ RUN addgroup --system --gid 1001 nodejs && \
     chown -R nestjs:nodejs /app
 USER nestjs
 
-# Expose the port specified by the PORT environment variable (default: 3001)
-ENV PORT 300
+# Expose the API port
+ENV PORT 3001
 EXPOSE ${PORT}
 
 # Health check to verify app is running
@@ -58,4 +58,4 @@ EXPOSE ${PORT}
 #   CMD wget -q -O - http://localhost:${PORT}/api/v1/health || exit 1
 
 # Command to run the application
-CMD ["node", "dist/main"] 
+CMD ["node", "dist/main"]
